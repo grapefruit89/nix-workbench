@@ -15,7 +15,7 @@ How-to: [`510-ingress-SERVICE.md`](510-ingress-SERVICE.md)
 
 > **A service describes itself. Ingress organs only consume that description.**
 
-No program names belong in 511, 513, 515, or 518. Seerr knowledge lives in `555-seerr.nix`. A new service is a new module plus a vhost registration — never an edit to the landing page, the DNS pruner, or the Caddy engine.
+No program *logic* belongs in 511, 513, 515, or 518 — the auth-upstream coupling is data-driven via `lib/registry.nix` (ADR-5120 contract: 511 targets `127.0.0.1:<pocket-id-port>`). Seerr knowledge lives in `555-seerr.nix`. A new service is a new module plus a vhost registration — never an edit to the landing page, the DNS pruner, or the Caddy engine.
 
 ## How a service joins the edge
 

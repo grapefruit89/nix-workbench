@@ -1,0 +1,383 @@
+# ============================================================================
+# docs/repository.yaml — mediNix Upstream Research Registry
+#
+# Purpose: routing metadata for agent research. This file answers
+#   "WHERE is the authoritative source for this question?"
+# It is NOT a knowledge base, not a documentation dump, and not a tool.
+#
+# Consumption: grep-able routing metadata; referenced from the AGENTS.md
+# routing contract. Escalation order (see 56-agents/medinix-nix SKILL.md):
+# repo code > nixpkgs/NixOS source > nix repl/nix eval > official docs.
+# Community sources (issues, discourse, wikis) are last resort only.
+#
+# Classes:
+#   upstream-core        official Nix/NixOS authority (language, modules, tooling)
+#   upstream-specialized official topic-specific repos
+#   module-upstream      community NixOS media-server module sets (pattern
+#                        reference only — NEVER authority for this repo's
+#                        architecture; the dezimalrahmen wins)
+#   service-upstream     actual service projects consumed by mediNix modules
+#   client-upstream      frontends/clients (reference only)
+#   sdk                  API SDKs (reference only)
+#   reference-config     personal/community NixOS configs (pattern reference
+#                        only — each carries its own assumptions; NEVER a
+#                        template for this repo's architecture)
+#
+# Research policy (binding):
+#   1. Inspect the existing mediNix implementation and registry first.
+#   2. Inspect the relevant NixOS/nixpkgs module (upstream-core).
+#   3. Inspect the relevant service upstream project.
+#   4. Inspect reference configurations when useful — extract patterns,
+#      not files.
+#   5. Compare every proposed pattern against the decimal framework,
+#      NIXMETA, hardening profiles, portability rules, and existing
+#      architecture.
+#   6. Implement the smallest mediNix-native solution.
+#   7. Document why the chosen structure exists.
+#
+#   Context7 (see documentation block) is an OPTIONAL research source with
+#   authority: reference. It may never override a local mediNix rule.
+# ============================================================================
+
+# ============================================================================
+# Infrastructure candidates (Determinate Systems) — classified, NOT adopted.
+# These are CI/verification tooling, NOT research sources and NOT skill
+# content. Do not install or wire any of these without a human decision.
+# ============================================================================
+
+infrastructure:
+  update-flake-lock:
+    class: ci-automation
+    status: candidate
+    url: https://github.com/DeterminateSystems/update-flake-lock
+    note: >
+      GitHub Action that refreshes flake.lock and opens PRs. v3+ no longer
+      installs Nix itself — Nix must be set up beforehand. Evaluate
+      interplay with the ratsche eval-gate before any adoption.
+
+  magic-nix-cache:
+    class: ci-performance
+    status: candidate
+    url: https://github.com/DeterminateSystems/magic-nix-cache
+    note: >
+      Zero-config binary cache over the GitHub Actions cache. Insert after
+      Nix install, before build/check steps. Pure CI infrastructure —
+      irrelevant outside CI.
+
+  flake-checker:
+    class: verification-tool
+    status: candidate
+    url: https://github.com/DeterminateSystems/flake-checker
+    note: >
+      Flake health / flake.lock analysis (plus a Rust lockfile-parsing
+      library). Candidate as an ADDITIONAL objective check alongside the
+      existing gates — never a replacement for nix flake check, NIXMETA,
+      decimal or registry checks.
+
+  flake-schemas:
+    class: optional-ecosystem
+    status: deferred
+    url: https://github.com/DeterminateSystems/flake-schemas
+    note: >
+      Schemas for flake outputs; documented as available in Determinate Nix
+      only. Do not build any dependency on this.
+
+research_inputs:
+  # --- New research inputs (classified 2026-09-16) — NO INSTALLATION ---
+  nixos-config-webui:
+    class: reference-config
+    url: https://github.com/milahu/nixos-config-webui
+    status: legacy-reference
+    note: >
+      Browser-based editor for Nix/NixOS configs; last activity ~2022-09.
+      REFERENCE ONLY (WebUI/UX ideas, config inspection) — no skill, no
+      verification authority, no current architecture component.
+  lezer-parser-nix:
+    class: sdk
+    url: https://github.com/vimjoyer/lezer-parser-nix
+    status: future-tooling-reference
+    note: >
+      Lezer parser/grammar for the Nix language (parser basis for
+      nix-eval-js). Relevant only if mediNix ever builds syntax-aware
+      analysis tooling beyond grep — currently unproven. Not a skill.
+  nixos-management-skill:
+    class: reference-config
+    url: https://github.com/michalzubkowicz/nixos-management-skill
+    status: gold-mining
+    note: >
+      Extensive NixOS management skill (config, VMs, install, images,
+      impermanence, LUKS, monitoring, anti-patterns). HIGH-VALUE
+      benchmark/gold-mining source only: compare rules, extract
+      patterns, reformulate mediNix-native. NEVER install or copy —
+      the project itself warns against unvetted skill installation.
+  nixomatic-skill:
+    class: reference-config
+    url: https://github.com/curriedsoftware/nixomatic-skill
+    status: optional-tooling-reference
+    note: >
+      Agent skill that provisions missing tools ephemerally via
+      nix develop / nixomatic without changing the system.
+      REFERENCE/CANDIDATE for ephemeral tooling; not core mediNix.
+  nixos-module-patterns:
+    class: reference-config
+    url: null
+    status: low-value-reference
+    note: >
+      mcpmarket catalog entry for generic NixOS/Home-Manager module
+      pattern skills. LOW VALUE: mediNix already owns Decimal, NIXMETA,
+      Factory, Hardening, Portability, Triangulation. Generic patterns
+      must never override local architecture.
+documentation:
+  context7:
+    enabled: false
+    authority: reference
+    note: >
+      Optional library-docs lookup. Currently disabled in the workbench
+      (token cost). If enabled, use only for upstream library API docs
+      with a stable library id; local mediNix rules always win.
+
+  zero-to-nix:
+    enabled: true
+    authority: reference
+    url: https://zero-to-nix.com/
+    note: >
+      Opinionated learning path for Nix and Flakes (Determinate Systems).
+      A source of EXPLANATIONS, not of truth — technical authority stays
+      with NixOS/nixpkgs, NixOS/nix and nix.dev. Its opinions (flakes-first,
+      Determinate installer) are explicitly not mediNix policy.
+
+  cloudflare-api:
+    enabled: true
+    authority: reference
+    url: https://developers.cloudflare.com/api/
+    note: >
+      Reference for the mediNix-native 513 anchor DDNS script (curl against
+      the Cloudflare API). No nixpkgs package or module involved.
+
+repositories:
+  # ── Official Nix/NixOS authority (verified: NixOS org, 2026-09-15) ────────
+  nixpkgs:
+    class: upstream-core
+    authority: primary
+    url: https://github.com/NixOS/nixpkgs
+    use_for: [nixos-modules, options, lib, package-definitions]
+
+  nix:
+    class: upstream-core
+    authority: primary
+    url: https://github.com/NixOS/nix
+    use_for: [nix-language, evaluator, cli, builtins]
+
+  nixfmt:
+    class: upstream-core
+    authority: primary
+    url: https://github.com/NixOS/nixfmt
+    use_for: [formatting]
+
+  nix-dev:
+    class: upstream-core
+    authority: primary
+    url: https://github.com/NixOS/nix.dev
+    use_for: [tutorials, best-practices, flake-guides]
+
+  rfcs:
+    class: upstream-core
+    authority: primary
+    url: https://github.com/NixOS/rfcs
+    use_for: [lang-changes, ecosystem-decisions]
+
+  nixos-hardware:
+    class: upstream-specialized
+    authority: secondary
+    url: https://github.com/NixOS/nixos-hardware
+    use_for: [hardware-quirks, firmware, host-hardware-modules]
+
+  # ── Reference configs (pattern reference only, verified 2026-09-15) ───────
+  librephoenix-nixos-config:
+    class: reference-config
+    authority: none
+    url: https://github.com/librephoenix/nixos-config
+    learn: [host-module-patch-separation, system-user-module-split]
+
+  vimjoyer-flake-starter:
+    class: reference-config
+    authority: none
+    url: https://github.com/vimjoyer/flake-starter-config
+    learn: [nixos-home-manager-module-split, small-standalone-modules]
+
+  nixos-titus:
+    class: reference-config
+    authority: none
+    url: https://github.com/ChrisTitusTech/nixos-titus
+    learn: [practical-syntax, warning-personal-paths-and-hardware-assumptions]
+
+  ironicbadger-infra:
+    class: reference-config
+    authority: none
+    url: https://github.com/ironicbadger/infra
+    learn: [real-world-server-organization, provision-patterns]
+
+  # ── Community NixOS media module sets (pattern reference only) ────────────
+  nixflix:
+    class: module-upstream
+    authority: none
+    url: https://github.com/kiriwalawren/nixflix
+    use_for: [module-patterns, hardening-comparison]
+
+  nixarr:
+    class: module-upstream
+    authority: none
+    url: https://github.com/nix-media-server/nixarr
+    use_for: [module-patterns, usenet-vpn-confinement-comparison]
+
+  # ── Service upstreams (consumed by mediNix modules) ───────────────────────
+  caddy:
+    class: service-upstream
+    url: https://github.com/caddyserver/caddy
+    module: 511-caddy
+    docs: https://caddyserver.com/docs/
+    use_for: [caddyfile-syntax, tls, reverse-proxy, plugins]
+
+  pocket-id:
+    class: service-upstream
+    url: https://github.com/pocket-id/pocket-id
+    module: 512-pocket-id
+    note: >
+      Pattern confirmation: the NixOS module (nixos/modules/services/
+      security/pocket-id.nix) uses credentials.<name> with systemd-creds
+      _FILE mechanism — empirically confirms mediNix's lib/creds.nix
+      architecture. Settings go plaintext to the Nix store (module warns);
+      mediNix must route secrets via credentials/environmentFile only.
+    docs: https://docs.pocket-id.org/
+    use_for: [oidc, oauth2, env-config]
+
+  jellyfin:
+    class: service-upstream
+    url: https://github.com/jellyfin/jellyfin
+    module: 551-jellyfin
+    docs: https://jellyfin.org/docs/
+    use_for: [server-api, env-config, transcode-gpu]
+
+  sonarr:
+    class: service-upstream
+    url: https://github.com/Sonarr/Sonarr
+    module: 532-sonarr
+    docs: https://wiki.servarr.com/sonarr
+    use_for: [api, env-config]
+
+  radarr:
+    class: service-upstream
+    url: https://github.com/Radarr/Radarr
+    module: 533-radarr
+    docs: https://wiki.servarr.com/radarr
+    use_for: [api, env-config]
+
+  lidarr:
+    class: service-upstream
+    url: https://github.com/Lidarr/Lidarr
+    module: 535-lidarr
+    use_for: [api, env-config]
+
+  readarr:
+    class: service-upstream
+    url: https://github.com/Readarr/Readarr
+    note: >
+      Upstream officially discontinued (2025). mediNix decision 2026-09-16:
+      RETIRED — module header status "retired", enablement stays at host
+      level (nobody enables it), registry entry and decimal slot 534
+      reserved, user data untouched. MIGRATE to a fork requires a separate
+      architecture decision; Docker-first forks are not acceptable per
+      ADR-5050.
+    use_for: [api]
+
+  prowlarr:
+    class: service-upstream
+    url: https://github.com/Prowlarr/Prowlarr
+    module: 536-prowlarr
+    use_for: [api, indexer-management]
+
+  sabnzbd:
+    class: service-upstream
+    url: https://github.com/sabnzbd/sabnzbd
+    module: 541-sabnzbd
+    use_for: [api, usenet]
+
+  autobrr:
+    class: service-upstream
+    url: https://github.com/autobrr/autobrr
+    use_for: [api]
+
+  audiobookshelf:
+    class: service-upstream
+    url: https://github.com/advplyr/audiobookshelf
+    module: 552-audiobookshelf
+    use_for: [api]
+
+  navidrome:
+    class: service-upstream
+    url: https://github.com/navidrome/navidrome
+    module: 553-navidrome
+    use_for: [api, music-server]
+
+  seerr:
+    class: service-upstream
+    url: https://github.com/seerr-team/seerr
+    use_for: [api, request-management]
+
+  libreseerr:
+    class: service-upstream
+    url: https://github.com/zamnzim/Libreseerr
+    use_for: [book-requests]
+
+  readmeabook:
+    class: service-upstream
+    url: https://github.com/kikootwo/ReadMeABook
+    use_for: [audiobook-requests]
+
+  jellarr:
+    class: service-upstream
+    url: https://github.com/venkyr77/jellarr
+    use_for: [jellyfin-config-sync]
+
+  shelfmark:
+    class: service-upstream
+    url: https://github.com/calibrain/shelfmark
+    use_for: [library-automation]
+
+  recyclarr:
+    class: service-upstream
+    url: https://github.com/recyclarr/recyclarr
+    module: 572-recyclarr
+    use_for: [trash-guides-sync, quality-profiles]
+
+  maintainerr:
+    class: service-upstream
+    url: https://github.com/Maintainerr/Maintainerr
+    use_for: [library-maintenance]
+
+  theme-park:
+    class: service-upstream
+    url: https://github.com/themepark-dev/theme.park
+    use_for: [theming]
+
+  feishin:
+    class: client-upstream
+    url: https://github.com/jeffvli/feishin
+    module: 554-feishin
+    use_for: [music-client-reference]
+
+  ntfy:
+    class: service-upstream
+    url: https://github.com/binwiederhut/ntfy
+    module: 581-ntfy
+    note: >
+      NixOS option and unit are "ntfy-sh" (services.ntfy-sh), package is
+      "ntfy" — naming mismatch is upstream real, not a typo.
+    use_for: [push-notifications, api]
+
+  # ── API SDKs (reference only) ─────────────────────────────────────────────
+  arr-sdks:
+    class: sdk
+    url: https://github.com/devopsarr
+    note: sonarr-py, radarr-py, lidarr-py, readarr-py, prowlarr-py, seerr-py, whisparr-py
+    use_for: [api-usage-examples]

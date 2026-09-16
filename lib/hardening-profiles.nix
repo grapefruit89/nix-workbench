@@ -4,6 +4,7 @@
 # domain: 50
 # last_reviewed: 2026-09-02
 # adr: ADR-5050
+# provides: ["lib/hardening-profiles"]
 # ---
 # Bind policy (SocketBind*) is independent from egress policy (IPAddress*).
 # 526 marks packets by UID and drops anything not leaving via the VPN iface.

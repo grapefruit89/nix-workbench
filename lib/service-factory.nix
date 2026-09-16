@@ -8,7 +8,7 @@
 # last_reviewed: 2026-08-11
 # links:
 #   adr: ADR-0000, ADR-5050
-# provides: ["mkService"]
+# provides: ["lib/service-factory", "mkService"]
 # requires: []
 # ports: []
 # upstream_github: "https://github.com/grapefruit89/mediNix-core"

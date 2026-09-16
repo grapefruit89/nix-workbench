@@ -1,3 +1,10 @@
+# ---
+# id: "cli"
+# title: "mediNix Health CLI (registry unitName = systemd unit)"
+# domain: 50
+# folder: lib
+# status: active
+# ---
 # mediNix Health CLI — registry unitName is the systemd unit.
 { pkgs, lib, registryJson, mediaRoot ? "/data/media", metadataDir ? "/data/metadata", mediaDomain ? "" }:
 

@@ -1,3 +1,10 @@
+# ---
+# id: "smoke-test"
+# title: "Smoke-Test (flake checks.mediNix-smoke)"
+# domain: 50
+# folder: lib
+# status: active
+# ---
 # tests/smoke-test.nix
 # Smoke-Test für mediNix-core — läuft in `nix flake check` via flake.nix checks.mediNix-smoke
 # Minimaler Test: Navidrome-Service-Unit existiert + Port 5530 korrekt konfiguriert.

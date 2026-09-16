@@ -9,7 +9,7 @@
 # links:
 #   adr: ADR-5043
 # provides: ["tierA", "tierB", "tierC"]
-# requires: ["lib/abc-tiering"]
+# requires: []
 # ports: []
 # upstream_docs: []
 # forum_links: []

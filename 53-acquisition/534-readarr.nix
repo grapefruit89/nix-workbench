@@ -3,9 +3,18 @@
 # title: "Readarr — Book Management (53-acquisition, Service 534)"
 # domain: 53
 # folder: 53-acquisition
-# status: active
+# status: retired
 # complexity: 3
 # last_reviewed: 2026-08-11
+# RETIRED (decision 2026-09-16, Project Owner): upstream Readarr is
+# officially discontinued since 2025-06-27 (metadata server unusable).
+# Consequences of this status:
+#   - Module file and registry entry STAY (no deletion, history preserved).
+#   - No new functionality may build on the retired upstream.
+#   - Decimal slot 534 stays reserved — do not reassign.
+#   - User data (/var/lib/readarr-5340) untouched; no automatic migration.
+#   - MIGRATE to a fork is out of scope until a separate architecture
+#     decision (Docker-first forks are not acceptable per ADR-5050).
 # logo: none — not in grapefruit89/logorepo yet
 # links: 
 # provides: []

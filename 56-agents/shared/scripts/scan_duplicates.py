@@ -11,10 +11,23 @@ Checks:
   5. which files configure services.caddy / sabnzbd (service-ownership check)
 Prints a summary; exits 0 always (caller decides what's a real violation).
 """
-import os, hashlib, re, sys
+import os, hashlib, re, subprocess, sys
 
-ROOT = sys.argv[1] if len(sys.argv) > 1 else "/opt/data/50-mediNix"
+# Worktree-safe: default ROOT = repo top-level relative to THIS script
+# (../../.. from 56-agents/shared/scripts/). Never a hardcoded host path.
+ROOT = sys.argv[1] if len(sys.argv) > 1 else os.path.dirname(
+    os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 GIT = os.path.join(ROOT, ".git")
+
+# Verify an actual git worktree (.git may be a FILE in worktrees).
+# If git is absent from ROOT there is no sane scan basis: fail loudly,
+# never fake a green "0 files" run.
+_git_ok = subprocess.run(
+    ["git", "-C", ROOT, "rev-parse", "--show-toplevel"],
+    capture_output=True)
+if _git_ok.returncode != 0:
+    print(f"[X] {ROOT} is not a git worktree — cannot scan. Exiting 1.")
+    sys.exit(1)
 
 by_name, by_hash, by_num, by_id = {}, {}, {}, {}
 
@@ -68,7 +81,7 @@ for dp, dirs, files in os.walk(ROOT):
             print(f"  sabnzbd: {os.path.relpath(os.path.join(dp,f), ROOT)}")
 
 total = sum(len(v) for v in by_name.values())
-print(f"\n=== SUMMARY: {total} files (no .git) ===")
+print(f"\n=== SUMMARY: {total} files scanned ===")
 print(f"Name-dupes:{len([1 for v in by_name.values() if len(v)>1])} | "
       f"Content-dupes:{len([1 for v in by_hash.values() if len(v)>1])} | "
       f"Num-dupes:{len([1 for v in by_num.values() if len(v)>1])} | "

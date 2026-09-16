@@ -3,6 +3,7 @@
 # title: "systemd-creds path contract"
 # domain: 50
 # last_reviewed: 2026-09-02
+# provides: ["lib/creds"]
 # ---
 # LoadCredentialEncrypted only accepts a systemd-creds blob.
 # Eval cannot open the host file, so we require a sealed *name*:

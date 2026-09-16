@@ -151,6 +151,19 @@
             || { echo ""; echo "Beheben mit:  deadnix --edit ."; exit 1; }
         '';
 
+        # ── Metadaten & generierte Doku (Priorität 2): NIXMETA-Checker ──────
+        # Read-only: validiert IDs, provides/requires, Deadlinks und die
+        # Aktualität der generierten AGENTS.md. Status: UNVERIFIED — erst
+        # nach echtem `nix flake check` auf einem NixOS-Host als Gate
+        # betrachten.
+        checks.medinix-meta = mkCheck "medinix-meta" (pkgs: [ pkgs.python3 ]) ''
+          python3 50-core/medinix-meta.py check
+        '';
+
+        checks.medinix-docs = mkCheck "medinix-docs" (pkgs: [ pkgs.python3 ]) ''
+          python3 50-core/medinix-meta.py check-docs
+        '';
+
         # ── Formatter + devShell (Priorität 3) ──────────────────────────────
         formatter = pkgs.nixfmt-rfc-style;
 

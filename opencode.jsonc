@@ -1,0 +1,85 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+
+  // Phase 0 — agent workbench config (branch: agent-workbench)
+  // The canonical repo ../mediNix-core is mounted as a read reference below.
+
+  // Auto-format after write/edit/patch. nixfmt is the single .nix formatter
+  // (flake checks enforce nixfmt-rfc-style). Everything else off — one
+  // formatter per language, no competing truths.
+  "formatter": {
+    "nixfmt": {},
+    "prettier": { "disabled": true },
+    "biome": { "disabled": true },
+    "shfmt": { "disabled": true }
+  },
+
+  // Enable built-in LSP servers. nixd integration is version-dependent —
+  // do not treat "nixd live-checks mediNix invariants" as a fact.
+  "lsp": true,
+
+  // Load the existing 56-agents skill tree (scanned recursively for SKILL.md).
+  "skills": {
+    "paths": ["56-agents"]
+  },
+
+  // Canonical repo as supporting context while working in the workbench.
+  "references": {
+    "medinix": {
+      "path": "../mediNix-core",
+      "description": "Canonical mediNix-core repository (main). Use for module implementation, lib/registry.nix, ADRs and existing patterns. Read-first; the workbench branch agent-workbench is where edits happen."
+    }
+  },
+
+  // Disable MCP servers inherited from the global configs (~/.config/opencode/):
+  // they cost tool-schemas in every turn and contradicts the mediNix agent
+  // design (grep + generated AGENTS.md + references instead of MCP noise).
+  // Re-enable individually here if a task ever truly needs one.
+  "mcp": {
+    "arr": { "enabled": false },
+    "chrome-devtools": { "enabled": false },
+    "context7": { "enabled": false },
+    "ha-mcp": { "enabled": false },
+    "homeassistant": { "enabled": false },
+    "kde-mcp": { "enabled": false },
+    "unraid": { "enabled": false }
+  },
+
+  "permission": {
+    "read": "allow",
+    "glob": "allow",
+    "grep": "allow",
+    // Skill-Permission (native OpenCode pattern syntax, verified 2026-09-16):
+    // exactly the six canonical skills are loadable; any other skill name
+    // (e.g. accidentally re-introduced legacy skills) is hidden/rejected.
+    // Removed the previous blanket "allow" — the legacy-skill landscape no
+    // longer exists, so nothing legitimate is blocked by this pattern.
+    "skill": {
+      "medinix-discipline": "allow",
+      "medinix-nix": "allow",
+      "medinix-authoring": "allow",
+      "medinix-review": "allow",
+      "medinix-debug": "allow",
+      "medinix-verify": "allow",
+      "*": "deny"
+    },
+    // Round-trip authorization (4.7): scoped grant — ONLY this doc file is
+    // editable by the builder agent; every other path stays "ask".
+    "edit": {
+      "*": "ask",
+      "docs/WORKBENCH.md": "allow"
+    },
+    "medinix-meta-docs": "ask",
+    "bash": {
+      "git status*": "allow",
+      "git diff*": "allow",
+      "git log*": "allow",
+      "rm -rf*": "deny",
+      "git reset --hard*": "deny",
+      "git clean -fd*": "deny",
+      "git clean -fdx*": "deny",
+      "git push --force*": "deny",
+      "*": "ask"
+    }
+  }
+}

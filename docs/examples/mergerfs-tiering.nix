@@ -1,3 +1,10 @@
+# ---
+# id: "mergerfs-tiering"
+# title: "Example host: MergerFS ABC-tiering"
+# domain: 50
+# folder: docs/examples
+# status: example
+# ---
 # docs/examples/mergerfs-tiering.nix — mediNix-core with MergerFS ABC-Tiering
 #
 # Use case: Host-side MergerFS union mount for stable library paths.

@@ -1,3 +1,10 @@
+# ---
+# id: "simple"
+# title: "Example host: minimal LAN-only media server"
+# domain: 50
+# folder: docs/examples
+# status: example
+# ---
 # docs/examples/simple.nix — Minimal mediNix-core host config
 #
 # Use case: LAN-only media server, no VPN, no external access.

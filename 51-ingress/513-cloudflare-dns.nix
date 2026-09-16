@@ -1,12 +1,12 @@
 # ---
 # id: "513-cloudflare-dns"
 # title: "Anchor DDNS — wan + lan A, wildcard/apex CNAME to wan (organ of 511)"
-# domain: 50
+# domain: 51
 # folder: 51-ingress
 # status: active
 # last_reviewed: 2026-09-02
 # provides: ["ddns", "cloudflare"]
-# requires: ["lib/service-factory"]
+# requires: ["lib/service-factory", "lib/registry"]
 # adr: ADR-5130
 # ---
 # Same token source as 514. No plaintext tokenFile.
@@ -20,6 +20,7 @@ let
   cfg  = config.medinix;
   ing  = cfg.ingress;
   ddns = cfg.dns.ddns;
+  registry = (import ../lib/registry.nix { inherit lib; }).services;
   zone = if ddns.zone != null then ddns.zone else cfg.domain;
 
   vhosts = cfg.ingress.vhosts or {};
@@ -88,6 +89,10 @@ lib.mkIf (cfg.enable && cfg.dns.mode == "standalone" && ddns.enable) {
       };
     })
     {
+      serviceConfig = {
+        User  = "cloudflare-ddns";
+        Group = "media";
+      };
       description = "mediNix-core 513 anchor DDNS (wan + lan, wildcard → wan)";
       wantedBy = [ "multi-user.target" ];
       after    = [ "network-online.target" ];
@@ -254,7 +259,7 @@ lib.mkIf (cfg.enable && cfg.dns.mode == "standalone" && ddns.enable) {
   };
 
   users.users.cloudflare-ddns = {
-    uid = 5130;
+    uid = registry."cloudflare-dns".num * 10;
     group = "media";
     isSystemUser = true;
     home = "/var/lib/cloudflare-ddns";

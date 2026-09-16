@@ -1,6 +1,6 @@
 # mediNix-core Knowledge Base
 
-Diese Dokumentation dient als Single Source of Truth (SSoT) für das mediNix-core Projekt. Sie ist als "OKF-light" Wiki für Agenten und Menschen aufgebaut.
+Diese Dokumentation ist eine Knowledge-Base- und Routing-Doku für den Modulbau ("OKF-light" Wiki für Agenten und Menschen) — keine Projekt-SSoT. Autorität liegt bei: `AGENTS.md` (Agent-Contract), `lib/registry.nix` (Decimal-SSoT) und `docs/WORKBENCH.md` (Workbench-Architektur).
 
 ## 🧭 Agent Routing (START HERE)
 

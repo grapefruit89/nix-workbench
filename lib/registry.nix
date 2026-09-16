@@ -3,6 +3,7 @@
 # title: "mediNix SSoT Registry"
 # domain: 50
 # last_reviewed: 2026-09-02
+# provides: ["lib/registry"]
 # ---
 { lib, ... }:
 
@@ -39,7 +40,7 @@ rec {
   services = {
     caddy          = mkService "caddy" 511 "network" "none";
     pocket-id      = mkService "pocket-id" 512 "network" "public";
-    cloudflare-dns = mkNoPortWithUnit "cloudflare-dns" 513 "script" "none" "cloudflare-ddns";
+    cloudflare-dns = mkNoPortWithUnit "cloudflare-dns" 513 "network" "none" "cloudflare-ddns";
 
     sonarr   = mkService "sonarr" 532 "dotnet" "internal";
     radarr   = mkService "radarr" 533 "dotnet" "internal";

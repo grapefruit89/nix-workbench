@@ -257,6 +257,7 @@ let
     extraConfig = {
       Service = {
         Type = lib.mkDefault "notify";
+        ExecReload = "${pkgs.caddy}/bin/caddy reload --force --config /etc/caddy-media/Caddyfile";
         WatchdogSec = lib.mkDefault "60s";
         CPUWeight = lib.mkDefault 400;
         IOWeight = lib.mkDefault 200;
