@@ -239,9 +239,13 @@ Bevorzugte Reihenfolge:
 2. Upstream GitHub
 3. nixpkgs package
 4. nixpkgs module
-5. offizielle Upstream-Dokumentation
-6. gezielte Referenz-Repositories
-7. Context7 als optionaler Accelerator
+5. Nix builtins/lib/pkgs-Funktionssignaturen → noogle.dev
+   (dokumentierte Query-API; liefert Quelle + Position zur
+   Rückverfolgung; Index gegen master — Signatur gegen die
+   konkrete Ziel-Channel-Version verifizieren)
+6. offizielle Upstream-Dokumentation
+7. gezielte Referenz-Repositories
+8. Context7 als optionaler Accelerator
 ```
 
 Lokale mediNix-Regeln haben Vorrang vor externen Patterns.
