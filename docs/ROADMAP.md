@@ -95,7 +95,7 @@ Deletion over addition.
 | 5.4 | Research-Adapter (MCP als Transport, GitHub/nixpkgs/Docs/Context7 als Quellen) | DONE (Entscheidung: nicht bauen) | 2026-09-16: PoC bewies, dass vorhandene OpenCode-Tools die Recherche-Kette vollständig abdecken; KEIN Adapter, KEIN Research-MCP, kein Knowledge-Sumpf. MCP bleibt optionale Transport-Erweiterung |
 | 5.5 | Agent End-to-End (PoC-Ergebnis → vollständiger Audit-Zyklus ohne Chat-Kontext) | DONE | 2026-09-16: Fresh-Agent-Audit 511-caddy.nix (Scorecard A–J alles PASS, Repo-Intaktheit bestätigt); Agent fand F1 (stripAuthHeaders/response-vs-request-header REAL) + F2 (ntfy-lookup REAL) — beide von Owner verifiziert; F5/F6 ehrlich UNRESOLVED |
 | 5.6 | Final Audit | IN_PROGRESS | 2026-09-16 Acceptance: A1–A7/A9 PASS; A8+A10 = Doc-Drift → B3-Konsistenzbatch; kritisch: Git-Anker fehlte → B3.2 |
-| 5.7 | ROADMAP auf Endzustand bringen | NEXT | letzte Phase-5-Aufgabe nach B3 |
+| 5.7 | ROADMAP auf Endzustand bringen | DONE | 2026-09-16: WORKBENCH BASELINE 1.0 = 4853772 FROZEN (docs/WORKBENCH.md: Boundary, Change-Klassen A/B, WCR-Prozedur, Freeze-Gate-Policy). WCR-001: PROTECTED-Lücke geschlossen (AGENTS.md/AUDIT-BRIEF.md/WORKBENCH.md/.opencode) → Baseline 1.1 |
 
 Ephemeral-Regel: Research-Output ist Arbeitsdatensatz des aktuellen Audits (untracked, verwerflich); nur mediNix-spezifische Erkenntnisse wandern danach in eine lokale SSoT/ADR/Doku. Kein dauerhafter docs/research/-Ordner, kein Knowledge-Sumpf.
 

@@ -39,7 +39,7 @@ DUP_EXEMPT='\.gitkeep|/SKILL\.md'
 
 # Protected: critical core (change = flagged as elevated intervention,
 # needs explicit owner Go — complements permission edit=ask).
-PROTECTED='lib/registry.nix|lib/service-factory.nix|lib/hardening-profiles.nix|lib/creds.nix|flake.nix|opencode.jsonc|56-agents/'
+PROTECTED='lib/registry.nix|lib/service-factory.nix|lib/hardening-profiles.nix|lib/creds.nix|flake.nix|opencode.jsonc|56-agents/|^AGENTS\.md$|^AUDIT-BRIEF\.md$|^docs/WORKBENCH\.md$|^\.opencode/'
 
 cd "$(git rev-parse --show-toplevel 2>/dev/null)" || {
   echo "REPO-SANITY"

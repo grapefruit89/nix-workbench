@@ -177,3 +177,14 @@ Phase-3-Aufgabencode, der sie adressiert. **Keine Guards gebaut — nur kartiert
 - repo-sanity = objective drift/diff check (Git is the sole change truth)
 - medinix-verify = domain verification (evidence rule; BLOCKED is never PASS)
 - Git = the record of what actually changed
+
+### WCR-001 (2026-09-16, Baseline 1.0 → 1.1)
+
+- WHY: Freeze-Boundary deckte 4 Workbench-Pfade nicht ab (PROTECTED-Liste).
+- WHAT: repo-sanity.sh PROTECTED erweitert um ^AGENTS.md$ / ^AUDIT-BRIEF.md$ /
+  ^docs/WORKBENCH.md$ / ^\.opencode/ (1 Zeile; Domain-AGENTS.md bleibt
+  generator-synced und ist bewusst NICHT protected).
+- IMPACT: Freeze-Gate deckt Boundary vollständig.
+- BASELINE: 4853772 (1.0)
+- VERIFICATION: git diff --check / medinix-meta check / check-docs / repo-sanity
+- NEW BASELINE: siehe Commit (1.1)
